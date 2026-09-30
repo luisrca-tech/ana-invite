@@ -1,0 +1,31 @@
+{
+  "name": "ana-luisa-convite",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0",
+    "check": "astro check",
+    "test": "vitest run",
+    "test:rules": "firebase emulators:exec --project demo-ana-luisa --only firestore \"vitest run --config vitest.rules.config.ts\"",
+    "emulators": "firebase emulators:start --project demo-ana-luisa --only auth,firestore",
+    "build": "astro check && astro build",
+    "preview": "astro preview --host 0.0.0.0"
+  },
+  "dependencies": {
+    "@fontsource-variable/cormorant-garamond": "^5.2.8",
+    "@fontsource-variable/dm-sans": "^5.2.8",
+    "astro": "^7.3.5",
+    "firebase": "^12.19.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@firebase/rules-unit-testing": "^5.0.2",
+    "firebase-tools": "^15.32.0",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.3"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "^1.13.6"
+  }
+}

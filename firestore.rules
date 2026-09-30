@@ -1,0 +1,56 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAnonymousGuest() {
+      return request.auth != null
+        && request.auth.token.firebase.sign_in_provider == 'anonymous';
+    }
+
+    function isValidName(name) {
+      return name is string
+        && name.size() >= 3
+        && name.size() <= 120
+        && name.matches('^[^ ].*[^ ]$')
+        && name.matches('.* .*');
+    }
+
+    function isGiftId(giftId) {
+      return giftId.matches('^(sala-01|cozinha-(0[1-9]|[1-3][0-9]|40)|banheiros-0[1-3]|quartos-(0[1-9]|10)|lavanderia-(0[1-9]|1[01]))$');
+    }
+
+    match /guests/{guestUid} {
+      allow get: if request.auth != null && request.auth.uid == guestUid;
+      allow list: if false;
+
+      allow create: if isAnonymousGuest()
+        && request.auth.uid == guestUid
+        && request.resource.data.keys().hasOnly(['fullName'])
+        && request.resource.data.keys().hasAll(['fullName'])
+        && isValidName(request.resource.data.fullName);
+
+      allow update, delete: if false;
+    }
+
+    match /reservations/{giftId} {
+      allow read: if true;
+
+      allow create: if isAnonymousGuest()
+        && isGiftId(giftId)
+        && request.resource.data.keys().hasOnly(['giftId', 'guestUid', 'fullName', 'reservedAt'])
+        && request.resource.data.keys().hasAll(['giftId', 'guestUid', 'fullName', 'reservedAt'])
+        && request.resource.data.giftId == giftId
+        && request.resource.data.guestUid == request.auth.uid
+        && isValidName(request.resource.data.fullName)
+        && request.resource.data.reservedAt == request.time
+        && exists(/databases/$(database)/documents/guests/$(request.auth.uid))
+        && get(/databases/$(database)/documents/guests/$(request.auth.uid)).data.fullName
+          == request.resource.data.fullName;
+
+      allow update: if false;
+
+      allow delete: if isAnonymousGuest()
+        && resource.data.guestUid == request.auth.uid;
+    }
+  }
+}

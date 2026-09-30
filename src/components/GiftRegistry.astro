@@ -1,0 +1,515 @@
+---
+import { giftCategories, gifts } from '../data/gifts';
+---
+
+<section class="registry-section section-shell" id="presentes" aria-labelledby="registry-title">
+  <div class="registry-intro reveal" data-reveal>
+    <span class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> Com carinho, para o nosso novo lar</span>
+    <h2 id="registry-title">Presentes que vão<br /><em>virar lembranças.</em></h2>
+    <p>
+      Sua presença é o nosso maior presente. Se quiser nos ajudar a preparar nosso novo lar,
+      deixamos algumas sugestões com carinho.
+    </p>
+    <p class="privacy-note">
+      Ao reservar, seu nome completo ficará visível para todos. Você poderá cancelar os presentes
+      escolhidos por você neste mesmo navegador.
+    </p>
+    <p class="privacy-note">
+      Para ajudar a evitar reservas automatizadas, a lista usa uma checagem invisível do
+      <a href="https://www.google.com/recaptcha/about/" target="_blank" rel="noopener noreferrer">Google reCAPTCHA</a>.
+      Consulte a <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">política de privacidade</a>
+      e os <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer">termos do Google</a>.
+    </p>
+  </div>
+
+  <div class="registry-panel reveal" data-reveal id="gift-registry" data-state="connecting">
+    <div class="registry-status" id="registry-status" role="status" aria-live="polite" aria-atomic="true">
+      Conectando à lista de presentes…
+    </div>
+
+    <div class="gift-controls">
+      <label class="gift-search">
+        <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none">
+          <circle cx="10.8" cy="10.8" r="6.4" stroke="currentColor" stroke-width="1.6"></circle>
+          <path d="m15.6 15.6 4.2 4.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+        </svg>
+        <span class="visually-hidden">Buscar presente</span>
+        <input type="search" id="gift-search" placeholder="Procure um presente…" autocomplete="off" />
+      </label>
+
+      <div class="gift-filters" role="group" aria-label="Filtrar lista de presentes">
+        <button type="button" data-filter="all" aria-pressed="true">Todos</button>
+        <button type="button" data-filter="available" aria-pressed="false">Disponíveis</button>
+        <button type="button" data-filter="mine" aria-pressed="false">Meus presentes</button>
+      </div>
+    </div>
+
+    <div class="gift-categories">
+      {giftCategories.map((category, index) => {
+        const categoryGifts = gifts.filter((gift) => gift.categoryId === category.id);
+
+        return (
+          <details
+            class="gift-category"
+            data-category={category.id}
+            open={index === 1}
+          >
+            <summary>
+              <span class="category-icon" aria-hidden="true">{category.icon}</span>
+              <span class="category-heading">
+                <span class="category-title">{category.label}</span>
+                <span class="category-caption">{category.description}</span>
+              </span>
+              <span class="category-count" data-count-for={category.id} aria-live="polite">
+                Aguardando a lista
+              </span>
+              <svg class="category-chevron" aria-hidden="true" viewBox="0 0 20 20" width="20" height="20" fill="none">
+                <path d="m4.5 7.5 5.5 5.25 5.5-5.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </summary>
+
+            <ul class="gift-list" aria-label={`Presentes para ${category.label}`}>
+              {categoryGifts.map((gift) => (
+                <li class="gift-row" data-gift-id={gift.id} data-category-id={category.id}>
+                  <span class="gift-marker" aria-hidden="true">✳</span>
+                  <span class="gift-name">{gift.label}</span>
+                  <span class="gift-state" data-gift-state={gift.id}>Verificando disponibilidade…</span>
+                  <button class="gift-action" type="button" data-action="reserve" data-gift-id={gift.id} disabled>
+                    Carregando…
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </details>
+        );
+      })}
+    </div>
+
+    <p class="gift-empty" id="gift-empty" hidden>Nenhum presente corresponde à sua busca.</p>
+    <p class="gift-note">Cada item da lista pode ser escolhido por uma família. Obrigado por fazer parte deste momento. ♡</p>
+  </div>
+</section>
+
+<dialog class="site-dialog" id="guest-name-dialog" aria-labelledby="guest-dialog-title">
+  <form id="guest-name-form">
+    <button class="dialog-close" type="button" data-close-dialog aria-label="Fechar">×</button>
+    <span class="dialog-ornament" aria-hidden="true">✳</span>
+    <p class="eyebrow">Um minutinho antes de escolher</p>
+    <h2 id="guest-dialog-title">Como podemos<br /><em>chamar você?</em></h2>
+    <p>Seu nome completo vai aparecer ao lado do presente escolhido, para que todos possam acompanhar a lista.</p>
+    <label class="name-field" for="guest-full-name">
+      <span>Seu nome completo</span>
+      <input
+        id="guest-full-name"
+        name="fullName"
+        type="text"
+        autocomplete="name"
+        minlength="3"
+        maxlength="120"
+        required
+        autofocus
+        placeholder="Ex.: Ana Luísa de Souza"
+        aria-describedby="guest-name-help guest-name-error"
+      />
+    </label>
+    <p class="field-help" id="guest-name-help">Pedimos apenas essa informação. Ela fica associada a este navegador.</p>
+    <p class="field-error" id="guest-name-error" role="alert"></p>
+    <button class="button button-primary dialog-submit" type="submit" id="guest-submit">
+      Continuar com carinho <span aria-hidden="true">→</span>
+    </button>
+  </form>
+</dialog>
+
+<dialog class="site-dialog cancel-dialog" id="cancel-dialog" aria-labelledby="cancel-dialog-title">
+  <form method="dialog" id="cancel-confirm-form">
+    <button class="dialog-close" type="submit" value="stay" aria-label="Voltar">×</button>
+    <span class="dialog-ornament" aria-hidden="true">♡</span>
+    <p class="eyebrow">Sua escolha</p>
+    <h2 id="cancel-dialog-title">Devolver o presente<br /><em>à lista?</em></h2>
+    <p id="cancel-dialog-copy">O item voltará a ficar disponível para os convidados.</p>
+    <div class="dialog-buttons">
+      <button class="button button-quiet" type="submit" value="stay">Continuar com o presente</button>
+      <button class="button button-secondary" type="button" id="confirm-cancel">Liberar presente</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+  import { giftCategories, gifts } from '../data/gifts';
+  import { countAvailable, filterGifts, type GiftFilter, type ReservationMap } from '../lib/giftCollection';
+  import type { GuestProfile } from '../lib/firebase';
+  import { normalizeFullName } from '../lib/fullName';
+
+  const registry = document.querySelector<HTMLElement>('#gift-registry');
+
+  if (registry) {
+    const status = document.querySelector<HTMLElement>('#registry-status')!;
+    const searchInput = document.querySelector<HTMLInputElement>('#gift-search')!;
+    const emptyState = document.querySelector<HTMLElement>('#gift-empty')!;
+    const nameDialog = document.querySelector<HTMLDialogElement>('#guest-name-dialog')!;
+    const nameForm = document.querySelector<HTMLFormElement>('#guest-name-form')!;
+    const nameInput = document.querySelector<HTMLInputElement>('#guest-full-name')!;
+    const nameError = document.querySelector<HTMLElement>('#guest-name-error')!;
+    const submitName = document.querySelector<HTMLButtonElement>('#guest-submit')!;
+    const cancelDialog = document.querySelector<HTMLDialogElement>('#cancel-dialog')!;
+    const cancelCopy = document.querySelector<HTMLElement>('#cancel-dialog-copy')!;
+    const confirmCancel = document.querySelector<HTMLButtonElement>('#confirm-cancel')!;
+    const revealPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const isFirebaseConfigured = Boolean(
+      import.meta.env.PUBLIC_FIREBASE_API_KEY &&
+        import.meta.env.PUBLIC_FIREBASE_APP_ID &&
+        import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
+    );
+    let reservations: ReservationMap = {};
+    let guest: GuestProfile | null = null;
+    let firebaseServices: typeof import('../lib/firebase') | null = null;
+    let firebaseServicesPromise: Promise<typeof import('../lib/firebase')> | null = null;
+    let filter: GiftFilter = 'all';
+    let pendingGiftId: string | null = null;
+    let pendingCancelId: string | null = null;
+    let guestReady = false;
+    let busy = new Set<string>();
+
+    function loadFirebaseServices() {
+      firebaseServicesPromise ??= import('../lib/firebase').then((services) => {
+        firebaseServices = services;
+        return services;
+      });
+      return firebaseServicesPromise;
+    }
+
+    function showStatus(message: string, state: string) {
+      status.textContent = message;
+      registry!.dataset.state = state;
+    }
+
+    function renderGiftRows() {
+      const visibleGifts = new Set(
+        filterGifts(gifts, reservations, guest?.uid ?? null, filter, searchInput.value).map(({ id }) => id),
+      );
+      const fresh = registry!.dataset.state === 'ready';
+      const canAct = fresh && guestReady;
+      let visibleCount = 0;
+
+      document.querySelectorAll<HTMLLIElement>('.gift-row').forEach((row) => {
+        const giftId = row.dataset.giftId!;
+        const gift = gifts.find((candidate) => candidate.id === giftId)!;
+        const reservation = reservations[giftId];
+        const state = row.querySelector<HTMLElement>('[data-gift-state]')!;
+        let action = row.querySelector<HTMLButtonElement>('.gift-action')!;
+
+        row.hidden = !visibleGifts.has(giftId);
+        if (row.hidden) return;
+        visibleCount += 1;
+
+        if (reservation) {
+          const isMine = reservation.guestUid === guest?.uid;
+          state.textContent = isMine ? 'Reservado por você' : `Reservado por ${reservation.fullName}`;
+          state.className = `gift-state ${isMine ? 'gift-state-mine' : 'gift-state-reserved'}`;
+          action.hidden = !isMine;
+          action.textContent = 'Cancelar reserva';
+          action.dataset.action = 'cancel';
+          action.disabled = !canAct || busy.has(giftId);
+        } else {
+          state.textContent = fresh ? 'Disponível' : 'Disponibilidade indisponível';
+          state.className = `gift-state ${fresh ? 'gift-state-available' : 'gift-state-stale'}`;
+          action.hidden = false;
+          action.textContent = !guestReady ? 'Conectando…' : busy.has(giftId) ? 'Salvando…' : 'Reservar';
+          action.dataset.action = 'reserve';
+          action.disabled = !canAct || busy.has(giftId);
+        }
+
+        action.setAttribute('aria-label', `${action.textContent}: ${gift.label}`);
+      });
+
+      for (const category of giftCategories) {
+        const count = document.querySelector<HTMLElement>(`[data-count-for="${category.id}"]`)!;
+        count.textContent = fresh
+          ? `${countAvailable(gifts, reservations, category.id)} disponíveis`
+          : 'Aguardando sincronização';
+      }
+
+      emptyState.hidden = visibleCount > 0;
+    }
+
+    function updateConnectionMessage() {
+      const current = registry!.dataset.state;
+
+      if (current === 'ready') {
+        showStatus('A lista está atualizada. Escolha um presente para reservar com carinho.', 'ready');
+      } else if (current === 'stale') {
+        showStatus('Estamos atualizando a lista. As reservas ficam disponíveis assim que houver conexão.', 'stale');
+      } else if (current === 'failed') {
+        showStatus('A lista está indisponível no momento. Tente novamente em instantes.', 'failed');
+      }
+
+      renderGiftRows();
+    }
+
+    function setBusy(giftId: string, isBusy: boolean) {
+      busy = new Set(busy);
+      if (isBusy) busy.add(giftId);
+      else busy.delete(giftId);
+      renderGiftRows();
+    }
+
+    async function reserve(giftId: string) {
+      if (!guest) {
+        pendingGiftId = giftId;
+        nameError.textContent = '';
+        nameInput.setCustomValidity('');
+        nameDialog.showModal();
+        return;
+      }
+
+      setBusy(giftId, true);
+      try {
+        const services = await loadFirebaseServices();
+        await services.reserveGift(giftId, guest);
+        showStatus('Presente reservado com sucesso. Que alegria ter você por perto!', 'ready');
+      } catch (error) {
+        showStatus(
+          firebaseServices?.getReservationError(error) ?? 'Sua reserva não foi alterada. Tente novamente em instantes.',
+          'ready',
+        );
+      } finally {
+        setBusy(giftId, false);
+      }
+    }
+
+    nameForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const normalizedName = normalizeFullName(nameInput.value);
+
+      if (!normalizedName) {
+        nameError.textContent = 'Conte seu nome e sobrenome para que possamos identificar sua escolha.';
+        nameInput.setCustomValidity('Informe pelo menos seu nome e sobrenome.');
+        nameInput.reportValidity();
+        return;
+      }
+
+      if (!pendingGiftId) return;
+
+      const giftId = pendingGiftId;
+      pendingGiftId = null;
+      nameError.textContent = '';
+      nameInput.setCustomValidity('');
+      submitName.disabled = true;
+      submitName.textContent = 'Guardando sua escolha…';
+      setBusy(giftId, true);
+
+      try {
+        const services = await loadFirebaseServices();
+        guest = await services.createGuestProfile(normalizedName);
+        guestReady = true;
+        nameDialog.close();
+        renderGiftRows();
+        await services.reserveGift(giftId, guest);
+        showStatus('Presente reservado com sucesso. Que alegria ter você por perto!', 'ready');
+      } catch (error) {
+        nameDialog.close();
+        showStatus(
+          firebaseServices?.getReservationError(error) ?? 'Sua reserva não foi alterada. Tente novamente em instantes.',
+          'ready',
+        );
+      } finally {
+        submitName.disabled = false;
+        submitName.innerHTML = 'Continuar com carinho <span aria-hidden="true">→</span>';
+        setBusy(giftId, false);
+      }
+    });
+
+    nameDialog.addEventListener('close', () => {
+      pendingGiftId = null;
+      nameError.textContent = '';
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((button) => {
+      button.addEventListener('click', () => {
+        filter = button.dataset.filter as GiftFilter;
+        document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((tab) => {
+          tab.setAttribute('aria-pressed', String(tab === button));
+        });
+        renderGiftRows();
+      });
+    });
+
+    searchInput.addEventListener('input', renderGiftRows);
+
+    document.querySelectorAll<HTMLButtonElement>('.gift-action').forEach((button) => {
+      button.addEventListener('click', () => {
+        const giftId = button.dataset.giftId!;
+
+        if (button.dataset.action === 'reserve') {
+          void reserve(giftId);
+          return;
+        }
+
+        const gift = gifts.find((candidate) => candidate.id === giftId)!;
+        pendingCancelId = giftId;
+        cancelCopy.textContent = `“${gift.label}” voltará a ficar disponível para os convidados. Deseja liberá-lo?`;
+        cancelDialog.showModal();
+      });
+    });
+
+    confirmCancel.addEventListener('click', async () => {
+      if (!pendingCancelId || !guest) return;
+
+      const giftId = pendingCancelId;
+      pendingCancelId = null;
+      confirmCancel.disabled = true;
+      setBusy(giftId, true);
+
+      try {
+        const services = await loadFirebaseServices();
+        await services.cancelReservation(giftId, guest.uid);
+        cancelDialog.close();
+        showStatus('Presente devolvido à lista. Obrigado por avisar!', 'ready');
+      } catch (error) {
+        cancelDialog.close();
+        showStatus(
+          firebaseServices?.getReservationError(error) ?? 'Sua reserva não foi alterada. Tente novamente em instantes.',
+          'ready',
+        );
+      } finally {
+        confirmCancel.disabled = false;
+        setBusy(giftId, false);
+      }
+    });
+
+    cancelDialog.addEventListener('close', () => {
+      pendingCancelId = null;
+    });
+
+    document.querySelectorAll<HTMLDialogElement>('.site-dialog').forEach((dialog) => {
+      dialog.querySelector('[data-close-dialog]')?.addEventListener('click', () => dialog.close());
+      dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) dialog.close();
+      });
+    });
+
+    document.querySelectorAll<HTMLDetailsElement>('.gift-category').forEach((category) => {
+      category.addEventListener('toggle', () => {
+        if (category.open && !revealPreference.matches) {
+          category.classList.add('category-opened');
+        }
+      });
+    });
+
+    function installPhotoReveals() {
+      if (revealPreference.matches) return;
+      document.documentElement.classList.add('motion-ready');
+      const elements = document.querySelectorAll<HTMLElement>('[data-reveal]');
+
+      if (!('IntersectionObserver' in window)) {
+        elements.forEach((element) => element.classList.add('is-revealed'));
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-revealed');
+              observer.unobserve(entry.target);
+            }
+          }
+        },
+        { threshold: 0.14, rootMargin: '0px 0px -42px 0px' },
+      );
+
+      elements.forEach((element) => observer.observe(element));
+    }
+
+    document.querySelectorAll<HTMLIFrameElement>('[data-lazy-map]').forEach((frame) => {
+      if (!('IntersectionObserver' in window)) {
+        frame.src = frame.dataset.lazyMap!;
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0]?.isIntersecting) {
+            frame.src = frame.dataset.lazyMap!;
+            observer.disconnect();
+          }
+        },
+        { rootMargin: '280px' },
+      );
+      observer.observe(frame);
+    });
+
+    installPhotoReveals();
+
+    async function connectGiftList() {
+      showStatus('Conectando à lista de presentes…', 'connecting');
+
+      try {
+        const services = await loadFirebaseServices();
+        const unsubscribe = services.observeReservations(
+          (nextReservations, isFresh) => {
+            reservations = nextReservations;
+            showStatus(
+              isFresh
+                ? 'A lista está atualizada. Escolha um presente para reservar com carinho.'
+                : 'Estamos atualizando a lista. As reservas ficam disponíveis assim que houver conexão.',
+              isFresh ? 'ready' : 'stale',
+            );
+            renderGiftRows();
+          },
+          () => {
+            showStatus('A lista está indisponível no momento. Tente novamente em instantes.', 'failed');
+            renderGiftRows();
+          },
+        );
+
+        if (!unsubscribe) {
+          showStatus('A lista compartilhada está sendo preparada.', 'unconfigured');
+          guestReady = true;
+          renderGiftRows();
+          return;
+        }
+
+        void services
+          .getCurrentGuest()
+          .then((currentGuest) => {
+            guest = currentGuest;
+            guestReady = true;
+            updateConnectionMessage();
+          })
+          .catch(() => {
+            guestReady = true;
+            showStatus('A lista está indisponível neste navegador. Verifique suas configurações de armazenamento.', 'failed');
+            renderGiftRows();
+          });
+      } catch {
+        showStatus('A lista está indisponível no momento. Tente novamente em instantes.', 'failed');
+        guestReady = true;
+        renderGiftRows();
+      }
+    }
+
+    if (!isFirebaseConfigured) {
+      showStatus('A lista compartilhada estará disponível em breve.', 'unconfigured');
+      guestReady = true;
+      renderGiftRows();
+    } else {
+      if (!('IntersectionObserver' in window)) {
+        void connectGiftList();
+      } else {
+        const connectionObserver = new IntersectionObserver(
+          (entries) => {
+            if (entries[0]?.isIntersecting) {
+              connectionObserver.disconnect();
+              void connectGiftList();
+            }
+          },
+          { rootMargin: '900px 0px' },
+        );
+        connectionObserver.observe(registry);
+      }
+
+      renderGiftRows();
+    }
+  }
+</script>

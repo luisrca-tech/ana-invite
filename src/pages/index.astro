@@ -1,0 +1,250 @@
+---
+import { Image, Picture, getImage } from 'astro:assets';
+import GiftRegistry from '../components/GiftRegistry.astro';
+import '../styles/global.css';
+
+import anaPortrait from '../../images/IMG_6242.jpg';
+import familyAtHome from '../../images/IMG_8155.png';
+import familyInRome from '../../images/IMG_1648.JPG.jpg';
+import familyPortrait from '../../images/IMG_3363.JPG.jpg';
+
+const socialPreview = await getImage({
+  src: familyPortrait,
+  width: 1200,
+  height: 630,
+  fit: 'cover',
+  position: 'center',
+  format: 'jpeg',
+  quality: 83,
+});
+const publicSiteUrl = import.meta.env.PUBLIC_SITE_URL?.replace(/\/+$/u, '');
+const socialImageUrl = publicSiteUrl ? new URL(socialPreview.src, publicSiteUrl).toString() : socialPreview.src;
+const directionsUrl = new URL('https://www.google.com/maps/dir/');
+directionsUrl.searchParams.set('api', '1');
+directionsUrl.searchParams.set('destination', 'Condomínio Terra do Boi II, Hidrolândia, GO, 75340-000');
+const embedUrl = new URL('https://www.google.com/maps');
+embedUrl.searchParams.set('q', 'Condomínio Terra do Boi II, Hidrolândia, Goiás');
+embedUrl.searchParams.set('output', 'embed');
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#faf7f0" />
+    <meta
+      name="description"
+      content="Ana Luísa faz aniversário e nossa família está começando um novo lar. Celebre esse dia especial com Ana Luísa, Eduardo Miguel e família em 17 de outubro."
+    />
+    {publicSiteUrl && <link rel="canonical" href={`${publicSiteUrl}/`} />}
+    <title>Ana Luísa, Eduardo & família — um convite com carinho</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content="Um convite com carinho — Ana Luísa & Eduardo" />
+    <meta
+      property="og:description"
+      content="Um novo ano de vida, um novo lar e muitos motivos para celebrar com você. Dia 17 de outubro, às 13h."
+    />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Um convite com carinho — Ana Luísa & Eduardo" />
+    <meta
+      name="twitter:description"
+      content="Um novo ano de vida, um novo lar e muitos motivos para celebrar com você. Dia 17 de outubro, às 13h."
+    />
+    <meta name="twitter:image" content={socialImageUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="#inicio" aria-label="Ana Luísa e Eduardo — início do convite">
+          <span class="brand-mark" aria-hidden="true">A<span>·</span>L</span>
+          <span class="brand-copy">
+            <strong>Ana Luísa & Eduardo</strong>
+            <span>17 de outubro · 2026</span>
+          </span>
+        </a>
+        <a class="header-link" href="#celebracao">
+          Venha celebrar conosco
+          <svg aria-hidden="true" viewBox="0 0 20 20" width="17" height="17" fill="none">
+            <path d="M3.5 10h12m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </a>
+      </header>
+
+      <main id="inicio">
+        <section class="hero section-shell" aria-labelledby="birthday-title">
+          <div class="hero-copy reveal" data-reveal>
+            <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> Um dia especial em família</p>
+            <h1 id="birthday-title">Ana<br /><em>Luísa</em></h1>
+            <p class="hero-message">
+              Celebrar a vida fica ainda mais especial quando temos por perto quem faz parte da nossa história.
+            </p>
+            <p class="birthday-note">
+              <span aria-hidden="true">♡</span>
+              <span>Quero comemorar esse novo ano de vida ao lado das pessoas que amo. Você é uma delas.</span>
+            </p>
+            <div class="event-ribbon" aria-label="Sábado, 17 de outubro de 2026, a partir das 13 horas">
+              <time class="date-number" datetime="2026-10-17">17</time>
+              <span class="date-copy"><strong>Sábado, outubro</strong><span>A partir das 13 horas</span></span>
+            </div>
+          </div>
+
+          <figure class="hero-art reveal" data-reveal>
+            <div class="hero-photo-frame">
+              <Picture
+                src={anaPortrait}
+                formats={['avif', 'webp']}
+                fallbackFormat="jpg"
+                widths={[360, 480, 640, 760]}
+                sizes="(max-width: 760px) 82vw, 40vw"
+                alt="Ana Luísa, a aniversariante, em um momento sorridente"
+                loading="eager"
+                fetchpriority="high"
+              />
+            </div>
+            <figcaption class="photo-caption"><strong>Com carinho</strong><span>para celebrar a vida</span></figcaption>
+            <span class="botanical-mark hero-botanical" aria-hidden="true">
+              <svg viewBox="0 0 64 128" fill="none">
+                <path d="M31 121C42 89 37 57 25 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                <path d="M27 83C7 78 5 63 6 53 19 55 29 65 27 83Zm5-21c19-3 25-18 23-29-14 3-24 14-23 29Zm-8-30C9 29 5 16 8 6c12 5 19 16 16 26Z" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round"></path>
+              </svg>
+            </span>
+          </figure>
+        </section>
+
+        <aside class="wishes" aria-label="Uma mensagem da família">
+          <p>Um novo ano de vida, um novo lar<br />e muitos motivos para celebrar com você.</p>
+          <span>Com amor, Ana & família</span>
+        </aside>
+
+        <section class="house-section section-shell" id="celebracao" aria-labelledby="house-title">
+          <div class="house-gallery reveal" data-reveal aria-label="Retratos da família">
+            <figure class="family-photo-main">
+              <Picture
+                src={familyPortrait}
+                formats={['avif', 'webp']}
+                fallbackFormat="jpg"
+                widths={[420, 600, 760, 960]}
+                sizes="(max-width: 760px) 83vw, 50vw"
+                alt="Ana Luísa, Eduardo Miguel e seu filho reunidos em uma foto de família"
+                loading="lazy"
+              />
+            </figure>
+            <figure class="family-photo-secondary">
+              <Image
+                src={familyAtHome}
+                alt="Eduardo, Ana Luísa e seu filho em um retrato cheio de afeto"
+                widths={[240, 340, 430]}
+                sizes="(max-width: 760px) 40vw, 20vw"
+                format="avif"
+                quality={76}
+                loading="lazy"
+              />
+            </figure>
+            <figure class="family-photo-secondary">
+              <Picture
+                src={familyInRome}
+                formats={['avif', 'webp']}
+                fallbackFormat="jpg"
+                widths={[220, 300, 390]}
+                sizes="(max-width: 760px) 35vw, 18vw"
+                alt="Um passeio de Eduardo, Ana Luísa e seu filho em Roma"
+                loading="lazy"
+              />
+            </figure>
+          </div>
+
+          <div class="house-copy reveal" data-reveal>
+            <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> Um capítulo novinho em folha</p>
+            <h2 id="house-title">Um lar para<br /><em>chamar de nosso.</em></h2>
+            <p>
+              Enquanto celebramos a vida da Ana, também temos a alegria de dividir mais um sonho:
+              nossa casa nova. Um lugar que, pouco a pouco, vai ficando com a nossa cara — e cheio
+              das pessoas que amamos.
+            </p>
+            <p class="home-note"><span aria-hidden="true">✳</span><span>Vai ser uma alegria celebrar esse começo pertinho de você.</span></p>
+          </div>
+        </section>
+
+        <section class="details-section" aria-labelledby="details-title">
+          <div class="details-inner">
+            <p class="eyebrow details-kicker">Marque esse dia com a gente</p>
+            <h2 class="details-title" id="details-title">Um sábado para <em>guardar no coração</em></h2>
+            <div class="details-grid">
+              <div class="detail-card">
+                <span class="detail-symbol" aria-hidden="true">✳</span>
+                <span class="detail-label">Quando</span>
+                <time class="detail-value" datetime="2026-10-17T13:00:00-03:00">Sábado, 17 de outubro</time>
+                <span class="detail-subvalue">A partir das 13h</span>
+              </div>
+              <div class="detail-card">
+                <span class="detail-symbol" aria-hidden="true">♡</span>
+                <span class="detail-label">O que vamos celebrar</span>
+                <span class="detail-value">Aniversário & casa nova</span>
+                <span class="detail-subvalue">De Ana Luísa, Eduardo & família</span>
+              </div>
+              <div class="detail-card">
+                <span class="detail-symbol" aria-hidden="true">⌂</span>
+                <span class="detail-label">Onde</span>
+                <span class="detail-value">Terra do Boi II</span>
+                <span class="detail-subvalue">Hidrolândia · Goiás</span>
+              </div>
+            </div>
+            <p class="details-invitation">Esperamos você para um dia de afeto, risadas e boas lembranças.</p>
+          </div>
+        </section>
+
+        <GiftRegistry />
+
+        <section class="location-section" id="localizacao" aria-labelledby="location-title">
+          <div class="location-inner section-shell">
+            <div class="location-copy reveal" data-reveal>
+              <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> A portaria do condomínio</p>
+              <h2 id="location-title">Até lá, com<br /><em>todo carinho.</em></h2>
+              <p>Toque em “Como chegar” para abrir o trajeto no Google Maps. O ponto indicado é a entrada do condomínio.</p>
+              <div class="address-card">
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="23" height="23" fill="none">
+                  <path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" stroke="currentColor" stroke-width="1.5"></path>
+                  <circle cx="12" cy="10" r="2.25" stroke="currentColor" stroke-width="1.5"></circle>
+                </svg>
+                <p>
+                  <strong>Condomínio Terra do Boi II · Portaria</strong>
+                  Hidrolândia – GO, 75340-000
+                </p>
+              </div>
+              <div class="map-actions">
+                <a class="button button-primary" href={directionsUrl.toString()} target="_blank" rel="noopener noreferrer">
+                  Como chegar <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="map-frame reveal" data-reveal>
+              <iframe
+                data-lazy-map={embedUrl.toString()}
+                title="Mapa da entrada do Condomínio Terra do Boi II, em Hidrolândia, Goiás"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              ></iframe>
+              <noscript>
+                <p class="map-placeholder">O mapa interativo está disponível com JavaScript. Use o botão “Como chegar” para abrir o Google Maps.</p>
+              </noscript>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p class="footer-signoff">Um abraço apertado,<br />Ana Luísa, Eduardo & família ♡</p>
+        <p class="footer-date">Sábado · 17.10.2026 · 13h</p>
+      </footer>
+    </div>
+
+  </body>
+</html>
