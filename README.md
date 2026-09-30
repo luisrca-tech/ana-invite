@@ -8,10 +8,10 @@ Requirements: Node.js 22 or newer and Java 21 or newer for the Firebase Emulator
 
 ```sh
 npm ci
-cp .env.example .env.local
+cp .env.example .env
 ```
 
-For local development, set these demo values in `.env.local`; they point the client at local emulators and do not require real Firebase credentials:
+For local development, set these demo values in `.env`; they point the client at local emulators and do not require real Firebase credentials:
 
 ```dotenv
 PUBLIC_FIREBASE_API_KEY=demo-api-key
@@ -43,7 +43,7 @@ Create a Firebase project on the no-cost Spark plan. In the Firebase console:
 
 1. Register a Web app and copy its API key and App ID.
 2. Enable **Authentication → Sign-in method → Anonymous**.
-3. Create the default **Cloud Firestore** database in production mode.
+3. Create the default **Cloud Firestore** database in production mode in `southamerica-east1` (São Paulo).
 4. Register a reCAPTCHA v3 site and register its secret in **Firebase Console → App Check** for the Web app.
 5. Add the deployed site's hostname to Authentication's authorized domains.
 6. Set `PUBLIC_FIREBASE_API_KEY`, `PUBLIC_FIREBASE_APP_ID`, `PUBLIC_FIREBASE_PROJECT_ID`, and the public `PUBLIC_FIREBASE_APP_CHECK_SITE_KEY` in the build environment. Set `PUBLIC_USE_FIREBASE_EMULATORS=false` for production. The production client deliberately stays unavailable if the App Check site key is missing.
