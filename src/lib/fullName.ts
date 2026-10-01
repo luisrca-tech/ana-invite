@@ -7,3 +7,10 @@ export function normalizeFullName(value: string): string | null {
 
   return name;
 }
+
+export function resetFullNameValidationOnInput(input: HTMLInputElement, error: HTMLElement): void {
+  input.addEventListener('input', () => {
+    input.setCustomValidity('');
+    error.textContent = '';
+  });
+}

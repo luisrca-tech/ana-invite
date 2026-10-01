@@ -66,8 +66,8 @@ embedUrl.searchParams.set('output', 'embed');
             <span>17 de outubro · 2026</span>
           </span>
         </a>
-        <a class="header-link" href="#celebracao">
-          Venha celebrar conosco
+        <a class="header-link" href="#presentes">
+          Lista de presentes
           <svg aria-hidden="true" viewBox="0 0 20 20" width="17" height="17" fill="none">
             <path d="M3.5 10h12m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
           </svg>
@@ -244,5 +244,35 @@ embedUrl.searchParams.set('output', 'embed');
       </footer>
     </div>
 
+    <script>
+      import { scrollSectionIntoViewportCenter } from '../lib/scrollSectionIntoViewport';
+
+      const PRESENTES_ID = 'presentes';
+
+      function alignPresentesSection(behavior: ScrollBehavior) {
+        const section = document.getElementById(PRESENTES_ID);
+        if (!section) return;
+        scrollSectionIntoViewportCenter(section, behavior);
+      }
+
+      function scrollBehaviorForInteraction(): ScrollBehavior {
+        return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth';
+      }
+
+      function syncPresentesScrollFromHash(behavior: ScrollBehavior) {
+        if (window.location.hash !== `#${PRESENTES_ID}`) return;
+        alignPresentesSection(behavior);
+      }
+
+      document.querySelector<HTMLAnchorElement>('a.header-link[href="#presentes"]')?.addEventListener('click', (event) => {
+        event.preventDefault();
+        alignPresentesSection(scrollBehaviorForInteraction());
+        history.pushState(null, '', `#${PRESENTES_ID}`);
+      });
+
+      syncPresentesScrollFromHash('auto');
+      window.addEventListener('load', () => syncPresentesScrollFromHash('auto'));
+      window.addEventListener('hashchange', () => syncPresentesScrollFromHash(scrollBehaviorForInteraction()));
+    </script>
   </body>
 </html>

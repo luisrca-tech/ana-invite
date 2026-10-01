@@ -138,7 +138,7 @@ import { giftCategories, gifts } from '../data/gifts';
     type ReservationMap,
   } from '../lib/giftCollection';
   import type { GuestProfile } from '../lib/firebase';
-  import { normalizeFullName } from '../lib/fullName';
+  import { normalizeFullName, resetFullNameValidationOnInput } from '../lib/fullName';
 
   const registry = document.querySelector<HTMLElement>('#gift-registry');
 
@@ -169,6 +169,8 @@ import { giftCategories, gifts } from '../data/gifts';
     let pendingCancelId: string | null = null;
     let guestReady = false;
     let busy = new Set<string>();
+
+    resetFullNameValidationOnInput(nameInput, nameError);
 
     function loadFirebaseServices() {
       firebaseServicesPromise ??= import('../lib/firebase').then((services) => {

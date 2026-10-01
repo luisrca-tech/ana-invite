@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeFullName } from './fullName';
+import { normalizeFullName, resetFullNameValidationOnInput } from './fullName';
+
+class TestInput extends EventTarget {
+  customValidity = 'Informe pelo menos seu nome e sobrenome.';
+
+  setCustomValidity(message: string): void {
+    this.customValidity = message;
+  }
+}
 
 describe('normalizeFullName', () => {
   it('trims extra spaces while preserving Brazilian names and accents', () => {
@@ -13,5 +21,16 @@ describe('normalizeFullName', () => {
 
   it('rejects names longer than Firestore rules allow', () => {
     expect(normalizeFullName(`Ana ${'a'.repeat(120)}`)).toBeNull();
+  });
+
+  it('clears stale custom and inline errors as the guest edits the name', () => {
+    const input = new TestInput();
+    const error = { textContent: 'Conte seu nome e sobrenome para que possamos identificar sua escolha.' };
+
+    resetFullNameValidationOnInput(input as unknown as HTMLInputElement, error as HTMLElement);
+    input.dispatchEvent(new Event('input'));
+
+    expect(input.customValidity).toBe('');
+    expect(error.textContent).toBe('');
   });
 });
