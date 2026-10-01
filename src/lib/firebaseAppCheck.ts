@@ -1,12 +1,13 @@
-export type AppCheckMode = { type: 'emulator' } | { type: 'recaptcha-v3'; siteKey: string };
+export type AppCheckMode =
+  | { type: 'emulator' }
+  | { type: 'disabled' }
+  | { type: 'recaptcha-enterprise'; siteKey: string };
 
 export function resolveAppCheckMode({ useEmulators, siteKey }: { useEmulators: boolean; siteKey?: string }): AppCheckMode {
   if (useEmulators) return { type: 'emulator' };
 
   const normalizedSiteKey = siteKey?.trim();
-  if (!normalizedSiteKey) {
-    throw new Error('A reCAPTCHA v3 site key is required for production Firebase access.');
-  }
+  if (!normalizedSiteKey) return { type: 'disabled' };
 
-  return { type: 'recaptcha-v3', siteKey: normalizedSiteKey };
+  return { type: 'recaptcha-enterprise', siteKey: normalizedSiteKey };
 }

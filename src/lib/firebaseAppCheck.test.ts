@@ -6,15 +6,13 @@ describe('Firebase App Check configuration', () => {
     expect(resolveAppCheckMode({ useEmulators: true })).toEqual({ type: 'emulator' });
   });
 
-  it('requires attestation before a production Firebase client can start', () => {
-    expect(() => resolveAppCheckMode({ useEmulators: false })).toThrow(
-      'A reCAPTCHA v3 site key is required for production Firebase access.',
-    );
+  it('lets production use Firebase without App Check when no Enterprise site key is configured', () => {
+    expect(resolveAppCheckMode({ useEmulators: false })).toEqual({ type: 'disabled' });
   });
 
-  it('configures the reCAPTCHA v3 site key for production', () => {
+  it('configures the reCAPTCHA Enterprise site key for production', () => {
     expect(resolveAppCheckMode({ useEmulators: false, siteKey: 'public-site-key' })).toEqual({
-      type: 'recaptcha-v3',
+      type: 'recaptcha-enterprise',
       siteKey: 'public-site-key',
     });
   });

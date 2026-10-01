@@ -1,6 +1,6 @@
 import { browserLocalPersistence, getAuth, setPersistence, signInAnonymously } from 'firebase/auth';
 import { FirebaseError, getApps, initializeApp } from 'firebase/app';
-import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 import {
   collection,
   connectFirestoreEmulator,
@@ -59,9 +59,9 @@ function getFirebase() {
     siteKey: PUBLIC_FIREBASE_APP_CHECK_SITE_KEY,
   });
 
-  if (appCheckMode.type === 'recaptcha-v3' && !appCheckInitialized) {
+  if (appCheckMode.type === 'recaptcha-enterprise' && !appCheckInitialized) {
     initializeAppCheck(app, {
-      provider: new ReCaptchaV3Provider(appCheckMode.siteKey),
+      provider: new ReCaptchaEnterpriseProvider(appCheckMode.siteKey),
       isTokenAutoRefreshEnabled: true,
     });
     appCheckInitialized = true;
