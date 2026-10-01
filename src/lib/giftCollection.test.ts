@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { filterGifts, countAvailable, getVisibleCategoryIds } from './giftCollection';
+import {
+  filterGifts,
+  countAvailable,
+  countMatchingGiftsInCategory,
+  getVisibleCategoryIds,
+} from './giftCollection';
 import { giftCategories, giftCatalogByCategory, gifts, type Gift } from '../data/gifts';
 
 const sampleGifts: Gift[] = [
@@ -36,6 +41,16 @@ describe('gift collection', () => {
 
     expect([...getVisibleCategoryIds(matches)]).toEqual(['sala']);
     expect(getVisibleCategoryIds([])).toEqual(new Set());
+  });
+
+  it('counts only gifts in a category that match the active search or filter', () => {
+    const searchMatches = filterGifts(sampleGifts, reservations, null, 'all', 'TV');
+    const guestMatches = filterGifts(sampleGifts, reservations, 'ana-guest', 'mine', '');
+
+    expect(countMatchingGiftsInCategory(searchMatches, 'sala')).toBe(1);
+    expect(countMatchingGiftsInCategory(searchMatches, 'cozinha')).toBe(0);
+    expect(countMatchingGiftsInCategory(guestMatches, 'sala')).toBe(1);
+    expect(countMatchingGiftsInCategory(guestMatches, 'cozinha')).toBe(0);
   });
 
   it('keeps one stable catalog entry for every gift in the invitation', () => {

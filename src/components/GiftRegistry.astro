@@ -131,6 +131,7 @@ import { giftCategories, gifts } from '../data/gifts';
   import { giftCategories, gifts } from '../data/gifts';
   import {
     countAvailable,
+    countMatchingGiftsInCategory,
     filterGifts,
     getVisibleCategoryIds,
     type GiftFilter,
@@ -227,9 +228,18 @@ import { giftCategories, gifts } from '../data/gifts';
 
       for (const category of giftCategories) {
         const count = document.querySelector<HTMLElement>(`[data-count-for="${category.id}"]`)!;
-        count.textContent = fresh
-          ? `${countAvailable(gifts, reservations, category.id)} disponíveis`
-          : 'Aguardando sincronização';
+        const matchingCount = countMatchingGiftsInCategory(matchingGifts, category.id);
+        const hasSearch = searchInput.value.trim().length > 0;
+
+        if (!fresh) {
+          count.textContent = 'Aguardando sincronização';
+        } else if (hasSearch) {
+          count.textContent = `${matchingCount} ${matchingCount === 1 ? 'resultado' : 'resultados'}`;
+        } else if (filter === 'mine') {
+          count.textContent = `${matchingCount} ${matchingCount === 1 ? 'presente' : 'presentes'}`;
+        } else {
+          count.textContent = `${countAvailable(gifts, reservations, category.id)} disponíveis`;
+        }
       }
 
       emptyState.hidden = visibleCount > 0;

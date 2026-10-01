@@ -13,6 +13,10 @@ export function getVisibleCategoryIds(matchingGifts: readonly Gift[]): Set<strin
   return new Set(matchingGifts.map(({ categoryId }) => categoryId));
 }
 
+export function countMatchingGiftsInCategory(matchingGifts: readonly Gift[], categoryId: string): number {
+  return matchingGifts.filter((gift) => gift.categoryId === categoryId).length;
+}
+
 function normalizeSearch(value: string): string {
   return value.trim().toLocaleLowerCase('pt-BR').normalize('NFD').replace(/\p{Diacritic}/gu, '');
 }
