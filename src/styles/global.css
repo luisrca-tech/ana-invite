@@ -432,7 +432,7 @@ img {
   grid-template-columns: 1.05fr 0.95fr;
   align-items: center;
   gap: clamp(44px, 8vw, 110px);
-  padding-block: 120px 127px;
+  padding-block: 104px 110px;
 }
 
 .house-gallery {
@@ -547,7 +547,7 @@ img {
 }
 
 .details-section {
-  padding: 84px 0 99px;
+  padding: 72px 0 84px;
   background: var(--wine-dark);
   color: var(--white);
 }
@@ -641,7 +641,7 @@ img {
   grid-template-columns: 0.76fr 1.24fr;
   align-items: start;
   gap: clamp(40px, 7.5vw, 103px);
-  padding-block: 128px 128px;
+  padding-block: 108px;
 }
 
 .registry-intro {
@@ -967,7 +967,7 @@ img {
 }
 
 .location-section {
-  padding: 94px 0 99px;
+  padding: 80px 0 84px;
   border-top: 1px solid var(--line);
   background: #f1eee6;
 }
@@ -1442,7 +1442,7 @@ img {
   .house-section {
     grid-template-columns: minmax(0, 1fr);
     gap: 27px;
-    padding-block: 74px 79px;
+    padding-block: 64px 67px;
   }
 
   .house-copy {
@@ -1488,7 +1488,7 @@ img {
   }
 
   .details-section {
-    padding-block: 66px 72px;
+    padding-block: 58px 62px;
   }
 
   .details-title {
@@ -1523,7 +1523,7 @@ img {
   .registry-section {
     grid-template-columns: minmax(0, 1fr);
     gap: 23px;
-    padding-block: 78px 76px;
+    padding-block: 68px 66px;
   }
 
   .registry-intro {
@@ -1636,7 +1636,7 @@ img {
   }
 
   .location-section {
-    padding-block: 67px 71px;
+    padding-block: 58px 61px;
   }
 
   .location-inner {
