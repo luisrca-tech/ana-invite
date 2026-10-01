@@ -12,11 +12,11 @@ export interface GiftCategory {
 }
 
 export const giftCategories: GiftCategory[] = [
-  { id: 'sala', label: 'Sala', icon: '⌂', description: 'Um cantinho para estar junto.' },
+  { id: 'sala', label: 'Sala', icon: '🛋️', description: 'Um cantinho para estar junto.' },
   { id: 'cozinha', label: 'Cozinha', icon: '🍳', description: 'Para as receitas, os cafés e as conversas.' },
-  { id: 'banheiros', label: 'Banheiros', icon: '≈', description: 'Pequenos cuidados para o dia a dia.' },
+  { id: 'banheiros', label: 'Banheiros', icon: '🚿', description: 'Pequenos cuidados para o dia a dia.' },
   { id: 'quartos', label: 'Quartos', icon: '☾', description: 'Para noites tranquilas e manhãs felizes.' },
-  { id: 'lavanderia', label: 'Lavanderia', icon: '❋', description: 'Para deixar a rotina mais leve.' },
+  { id: 'lavanderia', label: 'Lavanderia', icon: '🧺', description: 'Para deixar a rotina mais leve.' },
 ];
 
 const giftNames: Record<string, string[]> = {
