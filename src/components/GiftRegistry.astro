@@ -64,7 +64,7 @@ import { giftCategories, gifts } from '../data/gifts';
             <ul class="gift-list" aria-label={`Presentes para ${category.label}`}>
               {categoryGifts.map((gift) => (
                 <li class="gift-row" data-gift-id={gift.id} data-category-id={category.id}>
-                  <span class="gift-marker" aria-hidden="true">✳</span>
+                  <span class="gift-marker" aria-hidden="true">•</span>
                   <span class="gift-name">{gift.label}</span>
                   <span class="gift-state" data-gift-state={gift.id}>Verificando disponibilidade…</span>
                   <button class="gift-action" type="button" data-action="reserve" data-gift-id={gift.id} disabled>
