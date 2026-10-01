@@ -11,7 +11,7 @@ npm ci
 cp .env.example .env
 ```
 
-For local development, set these demo values in `.env`; they point the client at local emulators and do not require real Firebase credentials:
+The example file uses these demo values in `.env`; they point the client at local emulators and do not require real Firebase credentials:
 
 ```dotenv
 PUBLIC_FIREBASE_API_KEY=demo-api-key
@@ -42,16 +42,15 @@ npm run build
 Create a Firebase project on the no-cost Spark plan. In the Firebase console:
 
 1. Register a Web app and copy its API key and App ID.
-2. Enable **Authentication → Sign-in method → Anonymous**.
+2. Anonymous Authentication is configured in `firebase.json` and enabled with the deploy command below.
 3. Create the default **Cloud Firestore** database in production mode in `southamerica-east1` (São Paulo).
-4. Register a reCAPTCHA v3 site and register its secret in **Firebase Console → App Check** for the Web app.
-5. Add the deployed site's hostname to Authentication's authorized domains.
-6. Set `PUBLIC_FIREBASE_API_KEY`, `PUBLIC_FIREBASE_APP_ID`, `PUBLIC_FIREBASE_PROJECT_ID`, and the public `PUBLIC_FIREBASE_APP_CHECK_SITE_KEY` in the build environment. Set `PUBLIC_USE_FIREBASE_EMULATORS=false` for production. The production client deliberately stays unavailable if the App Check site key is missing.
-7. Deploy the repository's Firestore rules:
+4. Register a reCAPTCHA v3 site and its secret in **Firebase Console → App Check** for the Web app. The site key is public and goes in Cloudflare's build variables; keep the reCAPTCHA secret in Firebase only.
+5. Add `localhost` and the deployed site's hostname to Authentication's authorized domains.
+6. Set `PUBLIC_FIREBASE_API_KEY`, `PUBLIC_FIREBASE_APP_ID`, `PUBLIC_FIREBASE_PROJECT_ID`, `PUBLIC_FIREBASE_APP_CHECK_SITE_KEY`, `PUBLIC_SITE_URL`, and `PUBLIC_USE_FIREBASE_EMULATORS=false` in Cloudflare's **build environment**. Astro embeds `PUBLIC_*` values into the static site during the build, so updating them requires a new build and deploy. The production client deliberately stays unavailable if the App Check site key is missing.
+7. Deploy anonymous Authentication and the repository's Firestore rules:
 
    ```sh
-   npx firebase login
-   npx firebase deploy --only firestore:rules --project YOUR_FIREBASE_PROJECT_ID
+   npx firebase deploy --only auth,firestore:rules --project YOUR_FIREBASE_PROJECT_ID
    ```
 
 Never put a Firebase Admin SDK key or service-account credential in this site. The client configuration is public; the rules enforce the allowed gift IDs, write-once guest names, single reservation per item, and owner-only cancellation.
@@ -62,13 +61,16 @@ Names on reservations are public to visitors. Anonymous Firebase accounts identi
 
 Firebase Spark has usage quotas. When a quota is exhausted, reservation service may be unavailable until quota resets; the page does not claim a reservation succeeded unless Firestore confirms it.
 
-## Cloudflare Pages
+## Cloudflare Workers
 
-Connect the repository to Cloudflare Pages and configure:
+This Astro site builds to the static `dist` directory and can be served as Worker assets on a `workers.dev` hostname. Connect the repository to Workers Builds and configure:
 
 - Build command: `npm run build`
-- Build output directory: `dist`
-- Environment variables: the four `PUBLIC_FIREBASE_*` values above, `PUBLIC_USE_FIREBASE_EMULATORS=false`, and `PUBLIC_SITE_URL` set to the canonical HTTPS site origin.
+- Deploy command: `npx wrangler deploy`
+- Worker static assets directory: `dist`
+- Build variables: the four `PUBLIC_FIREBASE_*` values above, `PUBLIC_USE_FIREBASE_EMULATORS=false`, and `PUBLIC_SITE_URL=https://convite.ana-luisa.workers.dev/`.
+
+Set these as Workers Builds build variables, not only as Worker runtime variables. The static Astro bundle reads them while it is being built.
 
 The build is static and uses Astro's image service to generate responsive image formats. The Firebase client bundle is loaded only as visitors approach the gift registry. Google Maps links and the lazy-loaded map search for the condominium entrance (portaria); confirm the exact gate pin with the hosts before distributing the invitation.
 
@@ -78,4 +80,5 @@ The build is static and uses Astro's image service to generate responsive image 
 - [Firebase anonymous authentication](https://firebase.google.com/docs/auth/web/anonymous-auth)
 - [Firebase App Check with reCAPTCHA v3](https://firebase.google.com/docs/app-check/web/recaptcha-provider)
 - [Firestore transactions](https://firebase.google.com/docs/firestore/manage-data/transactions)
-- [Deploy Astro to Cloudflare Pages](https://developers.cloudflare.com/pages/framework-guides/deploy-an-astro-site/)
+- [Deploy Astro to Cloudflare Workers](https://developers.cloudflare.com/workers/framework-guides/web-apps/astro/)
+- [Workers Builds configuration](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/)
