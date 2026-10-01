@@ -5,7 +5,7 @@ import { giftCategories, gifts } from '../data/gifts';
 <section class="registry-section section-shell" id="presentes" aria-labelledby="registry-title">
   <div class="registry-intro reveal" data-reveal>
     <span class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> Com carinho, para o nosso novo lar</span>
-    <h2 id="registry-title">Presentes que vão<br /><em>virar lembranças.</em></h2>
+    <h2 id="registry-title">Presentes que vão virar<br /><em>lembranças.</em></h2>
     <p>
       Sua presença é o nosso maior presente. Se quiser nos ajudar a preparar nosso novo lar,
       deixamos algumas sugestões com carinho.
@@ -39,14 +39,13 @@ import { giftCategories, gifts } from '../data/gifts';
     </div>
 
     <div class="gift-categories">
-      {giftCategories.map((category, index) => {
+      {giftCategories.map((category) => {
         const categoryGifts = gifts.filter((gift) => gift.categoryId === category.id);
 
         return (
           <details
             class="gift-category"
             data-category={category.id}
-            open={index === 1}
           >
             <summary>
               <span class="category-icon" aria-hidden="true">{category.icon}</span>
@@ -130,7 +129,13 @@ import { giftCategories, gifts } from '../data/gifts';
 
 <script>
   import { giftCategories, gifts } from '../data/gifts';
-  import { countAvailable, filterGifts, type GiftFilter, type ReservationMap } from '../lib/giftCollection';
+  import {
+    countAvailable,
+    filterGifts,
+    getVisibleCategoryIds,
+    type GiftFilter,
+    type ReservationMap,
+  } from '../lib/giftCollection';
   import type { GuestProfile } from '../lib/firebase';
   import { normalizeFullName } from '../lib/fullName';
 
@@ -178,12 +183,16 @@ import { giftCategories, gifts } from '../data/gifts';
     }
 
     function renderGiftRows() {
-      const visibleGifts = new Set(
-        filterGifts(gifts, reservations, guest?.uid ?? null, filter, searchInput.value).map(({ id }) => id),
-      );
+      const matchingGifts = filterGifts(gifts, reservations, guest?.uid ?? null, filter, searchInput.value);
+      const visibleGifts = new Set(matchingGifts.map(({ id }) => id));
+      const visibleCategories = getVisibleCategoryIds(matchingGifts);
       const fresh = registry!.dataset.state === 'ready';
       const canAct = fresh && guestReady;
       let visibleCount = 0;
+
+      document.querySelectorAll<HTMLDetailsElement>('.gift-category').forEach((category) => {
+        category.hidden = !visibleCategories.has(category.dataset.category!);
+      });
 
       document.querySelectorAll<HTMLLIElement>('.gift-row').forEach((row) => {
         const giftId = row.dataset.giftId!;
@@ -230,7 +239,7 @@ import { giftCategories, gifts } from '../data/gifts';
       const current = registry!.dataset.state;
 
       if (current === 'ready') {
-        showStatus('A lista está atualizada. Escolha um presente para reservar com carinho.', 'ready');
+        showStatus('', 'ready');
       } else if (current === 'stale') {
         showStatus('Estamos atualizando a lista. As reservas ficam disponíveis assim que houver conexão.', 'stale');
       } else if (current === 'failed') {
@@ -445,7 +454,7 @@ import { giftCategories, gifts } from '../data/gifts';
             reservations = nextReservations;
             showStatus(
               isFresh
-                ? 'A lista está atualizada. Escolha um presente para reservar com carinho.'
+                ? ''
                 : 'Estamos atualizando a lista. As reservas ficam disponíveis assim que houver conexão.',
               isFresh ? 'ready' : 'stale',
             );

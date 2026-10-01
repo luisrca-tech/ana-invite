@@ -688,6 +688,10 @@ img {
   line-height: 1.55;
 }
 
+.registry-status:empty {
+  display: none;
+}
+
 .registry-panel[data-state='stale'] .registry-status,
 .registry-panel[data-state='connecting'] .registry-status {
   border-color: #ddcfaa;

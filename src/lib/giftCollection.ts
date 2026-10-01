@@ -9,6 +9,10 @@ export interface ReservationSummary {
 
 export type ReservationMap = Readonly<Record<string, ReservationSummary>>;
 
+export function getVisibleCategoryIds(matchingGifts: readonly Gift[]): Set<string> {
+  return new Set(matchingGifts.map(({ categoryId }) => categoryId));
+}
+
 function normalizeSearch(value: string): string {
   return value.trim().toLocaleLowerCase('pt-BR').normalize('NFD').replace(/\p{Diacritic}/gu, '');
 }
