@@ -77,6 +77,25 @@ describe('Firestore reservation rules', () => {
     await assertFails(updateDoc(tv, { fullName: 'Ana Outro Nome' }));
     await assertFails(deleteDoc(doc(guestB, 'reservations', 'sala-01')));
     await assertSucceeds(deleteDoc(tv));
+
+    for (const giftId of ['cozinha-41', 'cozinha-42', 'cozinha-43']) {
+      await assertSucceeds(
+        setDoc(doc(guestA, 'reservations', giftId), {
+          giftId,
+          guestUid: 'guest-a',
+          fullName: 'Ana Luísa',
+          reservedAt: serverTimestamp(),
+        }),
+      );
+    }
+    await assertFails(
+      setDoc(doc(guestA, 'reservations', 'cozinha-44'), {
+        giftId: 'cozinha-44',
+        guestUid: 'guest-a',
+        fullName: 'Ana Luísa',
+        reservedAt: serverTimestamp(),
+      }),
+    );
   });
 
   it('rejects unlisted gifts, altered names, incomplete reservations, and non-anonymous accounts', async () => {

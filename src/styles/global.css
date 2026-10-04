@@ -211,8 +211,8 @@ img {
   background: var(--wine);
 }
 
-.hero h1,
-.house-copy h2,
+.hero h2,
+.house-copy h1,
 .registry-intro h2,
 .location-copy h2,
 .site-dialog h2 {
@@ -222,14 +222,14 @@ img {
   letter-spacing: -0.045em;
 }
 
-.hero h1 {
+.hero h2 {
   max-width: 550px;
   font-size: clamp(64px, 9vw, 116px);
   line-height: 0.86;
 }
 
-.hero h1 em,
-.house-copy h2 em,
+.hero h2 em,
+.house-copy h1 em,
 .registry-intro h2 em,
 .location-copy h2 em,
 .site-dialog h2 em {
@@ -509,7 +509,7 @@ img {
   padding-block: 16px;
 }
 
-.house-copy h2,
+.house-copy h1,
 .registry-intro h2,
 .location-copy h2 {
   font-size: clamp(51px, 6vw, 76px);
@@ -1371,7 +1371,7 @@ img {
     letter-spacing: 0.15em;
   }
 
-  .hero h1 {
+  .hero h2 {
     max-width: 470px;
     margin-top: 18px;
     font-size: clamp(65px, 17vw, 94px);
@@ -1449,7 +1449,7 @@ img {
     grid-row: 1;
   }
 
-  .house-copy h2,
+  .house-copy h1,
   .registry-intro h2,
   .location-copy h2 {
     margin-top: 15px;
@@ -1707,7 +1707,7 @@ img {
     width: calc(100% - 30px);
   }
 
-  .hero h1 {
+  .hero h2 {
     font-size: 63px;
   }
 

@@ -62,6 +62,9 @@ const giftNames: Record<string, string[]> = {
     'Lixeira da cozinha',
     'Porta-detergente / esponja',
     'Porta-papel-toalha',
+    'Talheres de plástico infantil',
+    'Copos de plástico infantil',
+    'Pratos de plástico infantil',
   ],
   banheiros: ['Toalhas de banho', 'Toalhas de rosto', 'Tapetes'],
   quartos: [
