@@ -636,6 +636,17 @@ img {
   text-align: center;
 }
 
+.drinks-note {
+  width: min(100%, 520px);
+  margin: 16px auto 0;
+  padding: 11px 16px;
+  border: 1px solid rgb(255 253 248 / 22%);
+  color: #f2e7df;
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+}
+
 .registry-section {
   display: grid;
   grid-template-columns: 0.76fr 1.24fr;
