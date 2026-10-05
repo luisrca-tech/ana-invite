@@ -77,6 +77,22 @@ describe('Firestore reservation rules', () => {
     await assertFails(updateDoc(tv, { fullName: 'Ana Outro Nome' }));
     await assertFails(deleteDoc(doc(guestB, 'reservations', 'sala-01')));
     await assertSucceeds(deleteDoc(tv));
+    await assertSucceeds(
+      setDoc(doc(guestA, 'reservations', 'sala-02'), {
+        giftId: 'sala-02',
+        guestUid: 'guest-a',
+        fullName: 'Ana Luísa',
+        reservedAt: serverTimestamp(),
+      }),
+    );
+    await assertFails(
+      setDoc(doc(guestA, 'reservations', 'sala-03'), {
+        giftId: 'sala-03',
+        guestUid: 'guest-a',
+        fullName: 'Ana Luísa',
+        reservedAt: serverTimestamp(),
+      }),
+    );
 
     for (const giftId of ['cozinha-41', 'cozinha-42', 'cozinha-43']) {
       await assertSucceeds(

@@ -20,7 +20,7 @@ export const giftCategories: GiftCategory[] = [
 ];
 
 const giftNames: Record<string, string[]> = {
-  sala: ['TV'],
+  sala: ['TV', 'Porta-retrato 10x15'],
   cozinha: [
     'Fruteira',
     'Micro-ondas',

@@ -16,7 +16,7 @@ service cloud.firestore {
     }
 
     function isGiftId(giftId) {
-      return giftId.matches('^(sala-01|cozinha-(0[1-9]|[1-3][0-9]|4[0-3])|banheiros-0[1-3]|quartos-(0[1-9]|10)|lavanderia-(0[1-9]|1[01]))$');
+      return giftId.matches('^(sala-0[1-2]|cozinha-(0[1-9]|[1-3][0-9]|4[0-3])|banheiros-0[1-3]|quartos-(0[1-9]|10)|lavanderia-(0[1-9]|1[01]))$');
     }
 
     match /guests/{guestUid} {

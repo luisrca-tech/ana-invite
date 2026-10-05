@@ -55,8 +55,12 @@ describe('gift collection', () => {
 
   it('keeps one stable catalog entry for every gift in the invitation', () => {
     expect(giftCategories.map(({ id }) => id)).toEqual(['sala', 'cozinha', 'banheiros', 'quartos', 'lavanderia']);
-    expect(gifts).toHaveLength(68);
-    expect(giftCatalogByCategory).toEqual({ sala: 1, cozinha: 43, banheiros: 3, quartos: 10, lavanderia: 11 });
+    expect(gifts).toHaveLength(69);
+    expect(giftCatalogByCategory).toEqual({ sala: 2, cozinha: 43, banheiros: 3, quartos: 10, lavanderia: 11 });
+    expect(gifts.filter(({ categoryId }) => categoryId === 'sala')).toEqual([
+      { id: 'sala-01', label: 'TV', categoryId: 'sala' },
+      { id: 'sala-02', label: 'Porta-retrato 10x15', categoryId: 'sala' },
+    ]);
     expect(gifts.some(({ label }) => label === 'Colher medidora')).toBe(true);
     expect(gifts.filter(({ categoryId }) => categoryId === 'cozinha').slice(-3)).toEqual([
       { id: 'cozinha-41', label: 'Talheres de plástico infantil', categoryId: 'cozinha' },
