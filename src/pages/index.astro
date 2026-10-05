@@ -22,11 +22,14 @@ const pageTitle = 'Convite de chá de casa nova e aniversário — Ana Luísa';
 const pageDescription =
   'Celebre a casa nova da família e o aniversário de Ana Luísa em 17 de outubro de 2026, a partir das 12h, em Hidrolândia, Goiás.';
 const { canonicalUrl, socialImageUrl } = createSeoUrls(import.meta.env.PUBLIC_SITE_URL, socialPreview.src);
+const eventCoordinates = '-16.89798927307129,-49.249000549316406';
 const directionsUrl = new URL('https://www.google.com/maps/dir/');
 directionsUrl.searchParams.set('api', '1');
-directionsUrl.searchParams.set('destination', 'Condomínio Terra do Boi II, Hidrolândia, GO, 75340-000');
+directionsUrl.searchParams.set('destination', eventCoordinates);
 const embedUrl = new URL('https://www.google.com/maps');
-embedUrl.searchParams.set('q', 'Condomínio Terra do Boi II, Hidrolândia, Goiás');
+embedUrl.searchParams.set('q', eventCoordinates);
+embedUrl.searchParams.set('z', '17');
+embedUrl.searchParams.set('hl', 'pt-BR');
 embedUrl.searchParams.set('output', 'embed');
 ---
 
@@ -203,16 +206,16 @@ embedUrl.searchParams.set('output', 'embed');
         <section class="location-section" id="localizacao" aria-labelledby="location-title">
           <div class="location-inner section-shell">
             <div class="location-copy reveal" data-reveal>
-              <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> A portaria do condomínio</p>
+              <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> Na chácara do condomínio</p>
               <h2 id="location-title">Até lá, com<br /><em>todo carinho.</em></h2>
-              <p>Toque em “Como chegar” para abrir o trajeto no Google Maps. O ponto indicado é a entrada do condomínio.</p>
+              <p>Toque em “Como chegar” para abrir o trajeto até a chácara. O mapa indica o ponto do evento dentro do condomínio.</p>
               <div class="address-card">
                 <svg aria-hidden="true" viewBox="0 0 24 24" width="23" height="23" fill="none">
                   <path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" stroke="currentColor" stroke-width="1.5"></path>
                   <circle cx="12" cy="10" r="2.25" stroke="currentColor" stroke-width="1.5"></circle>
                 </svg>
                 <p>
-                  <strong>Condomínio Terra do Boi II · Portaria</strong>
+                  <strong>Chácara · Condomínio Terra do Boi II</strong>
                   Hidrolândia – GO, 75340-000
                 </p>
               </div>
@@ -226,7 +229,7 @@ embedUrl.searchParams.set('output', 'embed');
             <div class="map-frame reveal" data-reveal>
               <iframe
                 data-lazy-map={embedUrl.toString()}
-                title="Mapa da entrada do Condomínio Terra do Boi II, em Hidrolândia, Goiás"
+                title="Mapa da chácara no Condomínio Terra do Boi II, em Hidrolândia, Goiás"
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
                 allowfullscreen

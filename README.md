@@ -72,7 +72,7 @@ This Astro site builds to the static `dist` directory and can be served as Worke
 
 Set these as Workers Builds build variables, not only as Worker runtime variables. The static Astro bundle reads them while it is being built.
 
-The build is static and uses Astro's image service to generate responsive image formats. The Firebase client bundle is loaded only as visitors approach the gift registry. Google Maps links and the lazy-loaded map search for the condominium entrance (portaria); confirm the exact gate pin with the hosts before distributing the invitation.
+The build is static and uses Astro's image service to generate responsive image formats. The Firebase client bundle is loaded only as visitors approach the gift registry. Google Maps directions and the lazy-loaded map point to the event site within Condomínio Terra do Boi II using the coordinates provided by the hosts.
 
 ## Documentation
 
