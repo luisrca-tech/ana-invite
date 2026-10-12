@@ -94,7 +94,7 @@ describe('Firestore reservation rules', () => {
       }),
     );
 
-    for (const giftId of ['cozinha-41', 'cozinha-42', 'cozinha-43']) {
+    for (const giftId of ['cozinha-41', 'cozinha-42', 'cozinha-43', 'cozinha-44', 'cozinha-45']) {
       await assertSucceeds(
         setDoc(doc(guestA, 'reservations', giftId), {
           giftId,
@@ -105,8 +105,8 @@ describe('Firestore reservation rules', () => {
       );
     }
     await assertFails(
-      setDoc(doc(guestA, 'reservations', 'cozinha-44'), {
-        giftId: 'cozinha-44',
+      setDoc(doc(guestA, 'reservations', 'cozinha-46'), {
+        giftId: 'cozinha-46',
         guestUid: 'guest-a',
         fullName: 'Ana Luísa',
         reservedAt: serverTimestamp(),
